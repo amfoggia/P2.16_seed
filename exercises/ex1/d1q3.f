@@ -48,7 +48,7 @@ c---------------------------------------------------
         open(99,file='movie.out')
 
         read(iunit,*) dif                  ! diffusivity 
-        read(iunit,*) ar,dr,br             ! reaction coefficients
+        read(iunit,*) ar,dr,br,cr          ! reaction coefficients
         read(iunit,*) sigma                ! width of the initial density distribution
         read(iunit,*) rho0,rhoinl,rhoout   ! initial density and inlet outlet densities for open flow sim's
         read(iunit,*) u0                   ! initial velocity
@@ -79,7 +79,11 @@ c--------------------------------------------------
     	do i=1,nx
           x = float(i-nx/2)/sigma
           form   = exp(-0.5*x*x)
-          rho(i) = rho0+amp*form
+	  if (i.lt.nx/2) then
+	   rho(i) = rho0+0.5d0	!amp*form
+	  else
+	   rho(i) = rho0-0.5d0
+	  end if
 	  u(i)   = u0
           uinit(i)=u(i)
 c we use the local equilibrium with the input density and flow fields
@@ -88,9 +92,10 @@ c we use the local equilibrium with the input density and flow fields
           f(2,i)=rho(i)*w(2)*(1-3.0*u(i))
 c local chemical rate
           rr = 2.0*ranpang(iseed)-1.
-          arl(i) = ar + dr*rr
+          arl(i) = ar !+ dr*rr
           brl(i) = br
-          write (6,*) 'ar,br',arl(i),brl(i)
+	  crl(i) = cr
+          write (6,*) 'ar,br,cr',arl(i),brl(i),crl(i)
         enddo
         
 	return	
@@ -109,6 +114,7 @@ c periodic BC
 c ==================================
 	subroutine move
 c ==================================
+! Stream	
 	implicit double precision(a-h,o-z)
 	include 'd1q3.par'
 c---------------------------------------------
@@ -176,7 +182,7 @@ c----------------------------------------------------------
         frce = efield
 c external force and chemical source
         do i=1,nx
-         chr    = arl(i)-brl(i)*rho(i)
+         chr    = arl(i)-brl(i)*rho(i)+crl(i)*rho(i)*rho(i)
          srce   = chr*rho(i)
          f(0,i) = f(0,i)+w(0)*srce
          f(1,i) = f(1,i)+w(1)*(srce+frce)
