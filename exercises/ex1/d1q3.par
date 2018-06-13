@@ -1,0 +1,9 @@
+          parameter (nx=100)
+          common /pop/ f,feq,w
+          dimension f(0:2,0:nx+1),feq(0:2,0:nx+1),w(0:2)
+          common /hydro/ rho,u,uinit,flag
+          dimension rho(0:nx+1),u(0:nx+1),uinit(0:nx+1),flag(nx),
+     $              arl(nx),brl(nx)
+          common /phys/ omega,trap,efield,u0,sigma,dif,ar,br,dr
+     $                 ,css,cs2,rho0,rho1,rhoinl,rhoout,arl,brl
+          common /num/ nsteps,ndiag
