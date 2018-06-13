@@ -1,0 +1,7 @@
+1.e-1                dif
+-1.e-3,1.e-1,1.e-2   ar dr br
+5.0                  sigma
+0.00  1.01  0.99     rho0,in,out
+0.10                 u0  
+0.000                efield
+10001 100            nstep,ndiag 
