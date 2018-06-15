@@ -1,0 +1,14 @@
+1.e-0  dif
+1.e-2  ar
+0.e-2  br
+-1.e-2 cr
+0.e-1  dr
+5.0    sigma
+0.0    rho0
+1.01   rhoinl
+0.99   rhoout
+0.0    u0
+0.0    efield
+1001   nsteps
+10     diag
+
